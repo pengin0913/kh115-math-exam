@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>115年度 高雄市小五數學學力檢測分析 試題計量與認知診斷管理系統  【設計:國教輔導團國小數學分團】</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #172554;
+      --primary-light: #3b82f6;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --correct: #10b981;
+      --wrong: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 40px;
+    }
+
+    .app-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: white;
+      padding: 16px 28px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-sub {
+      font-size: 0.82rem;
+      color: #93c5fd;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--primary);
+      border-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      border: 1px solid #dc2626;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .logout-btn:hover {
+      background: #dc2626;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .notice-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Login Screen */
+    .login-wrapper {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+    }
+
+    .input-field {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .input-field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .input-field input, .input-field textarea, .input-field select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-field input:focus, .input-field textarea:focus, .input-field select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .login-err {
+      color: var(--danger);
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-top: 14px;
+    }
+
+    /* Overview Stats Bar */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stat-card .val {
+      font-size: 1.85rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .stat-card .desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Question Selector Bar */
+    .controls-panel {
+      background: var(--card-bg);
+      padding: 18px 22px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .selector-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .select-dropdown {
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 2px solid var(--primary-light);
+      font-size: 0.95rem;
+      background: white;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .chip-btn:hover {
+      background: #eff6ff;
+      border-color: var(--primary-light);
+    }
+
+    .chip-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .chip-btn.danger-tag { border-left: 3px solid var(--danger); }
+    .chip-btn.warning-tag { border-left: 3px solid var(--warning); }
+
+    /* Question Card Layout */
+    .detail-container {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1040px) {
+      .detail-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    /* Question Main + Image Layout */
+    .q-main-layout {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .q-text-column {
+      flex: 1;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      white-space: pre-line;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .q-image-column {
+      flex: 0 0 280px;
+      max-width: 45%;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .q-image-column img {
+      max-width: 100%;
+      max-height: 240px;
+      object-fit: contain;
+      border-radius: 6px;
+      cursor: zoom-in;
+      transition: transform 0.2s;
+      display: block;
+      margin: 0 auto;
+    }
+    .q-image-column img:hover {
+      transform: scale(1.02);
+    }
+
+    .img-zoom-tip {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .img-missing-box {
+      background: #fffbeb;
+      border: 1px dashed #d97706;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.8rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .q-main-layout {
+        flex-direction: column;
+      }
+      .q-image-column {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* Options */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .opt-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .opt-item.is-correct {
+      background: #f0fdf4;
+      border-color: var(--correct);
+      box-shadow: 0 0 0 1px var(--correct);
+    }
+
+    .opt-idx {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .opt-item.is-correct .opt-idx {
+      background: var(--correct);
+      color: white;
+    }
+
+    .opt-text {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .opt-tag {
+      margin-left: 8px;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 700;
+    }
+
+    /* Badges & Alert boxes */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-yellow { background: #fef3c7; color: #b45309; }
+    .badge-red { background: #fee2e2; color: #b91c1c; }
+
+    .diag-box {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary-light);
+      padding: 14px 16px;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      color: #1e293b;
+      margin-top: 16px;
+    }
+    .diag-box.red-alert { background: #fef2f2; border-left-color: var(--danger); color: #991b1b; }
+    .diag-box.yellow-alert { background: #fffbeb; border-left-color: var(--warning); color: #92400e; }
+
+    /* Distribution Charts & Tables */
+    .dist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 14px;
+    }
+    .dist-table th, .dist-table td {
+      padding: 8px 8px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .dist-table th { background: #f1f5f9; font-weight: 700; }
+    .dist-table td.correct-col { background: #dcfce7; font-weight: 700; color: #166534; }
+    .dist-table td.high-distractor { background: #fee2e2; font-weight: 700; color: #991b1b; }
+
+    .mini-bar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .mini-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+    .mini-bar-label { width: 65px; font-weight: 600; }
+    .mini-bar-track {
+      flex: 1;
+      height: 22px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+    .bar-seg {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .seg-1 { background: #3b82f6; }
+    .seg-2 { background: #06b6d4; }
+    .seg-3 { background: #8b5cf6; }
+    .seg-4 { background: #f59e0b; }
+    .seg-5 { background: #94a3b8; }
+
+    .legend-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .legend-color { width: 12px; height: 12px; border-radius: 2px; }
+
+    /* Full Matrix Master Table */
+    .master-table-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .master-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 16px;
+    }
+    .master-table th, .master-table td {
+      padding: 10px 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .master-table th { background: #f1f5f9; font-weight: 700; position: sticky; top: 0; }
+    .master-table tr:hover { background: #f8fafc; cursor: pointer; }
+    .master-table tr.selected-tr { background: #eff6ff; border-left: 4px solid var(--primary); }
+
+    /* Admin Dual Panel */
+    .admin-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1000px) {
+      .admin-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .admin-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .paste-drop-zone {
+      border: 2.5px dashed #3b82f6;
+      border-radius: 12px;
+      padding: 26px 16px;
+      text-align: center;
+      background: #eff6ff;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+      margin-top: 10px;
+    }
+    .paste-drop-zone:focus, .paste-drop-zone.dragover {
+      border-color: #1d4ed8;
+      background: #dbeafe;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+    .paste-drop-zone p { color: #1e3a8a; font-size: 0.95rem; margin-bottom: 6px; }
+
+    .btn-action {
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-outline { background: white; border: 1.5px solid var(--border); color: var(--text-main); }
+    .btn-outline:hover { background: #f8fafc; border-color: var(--primary); }
+
+    /* Modal for Image Zoom */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      position: relative;
+    }
+    .modal-content img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      display: block;
+      border-radius: 6px;
+    }
+    .modal-close {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      background: #ef4444;
+      color: white;
+      border: 2px solid white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- 頂部共用導覽列 -->
+  <header class="app-header">
+    <div class="brand">
+      <div>
+        <div class="brand-title">115年度 高雄市小五數學學力檢測分析</div>
+        <div class="brand-sub">::教育試題計量品質與認知診斷管理系統 (v.08.31)</div>
+	<div class="brand-sub">::維護與設計：國教輔導團國小數學分團 math@kecg </div>
+      </div>
+    </div>
+
+    <div v-if="isLoggedIn" class="nav-tabs">
+      <button 
+        class="tab-btn" 
+        :class="{ active: currentTab === 'dashboard' }"
+        @click="currentTab = 'dashboard'"
+      >
+        📊 試題統計分析看板
+      </button>
+      <button 
+        class="tab-btn" 
+        :class="{ active: currentTab === 'admin' }"
+        @click="currentTab = 'admin'"
+      >
+        ⚙️ 題目題幹與智慧貼圖後台
+      </button>
+      <button class="logout-btn" @click="handleLogout">
+        登出 (Admin)
+      </button>
+    </div>
+  </header>
+
+  <!-- 1. 未登入視圖 (登入守門員) -->
+  <main v-if="!isLoggedIn" class="login-wrapper">
+    <div class="login-card">
+      <div style="font-size: 2.5rem; margin-bottom: 12px;">🔐</div>
+      <h2>管理系統權限認證</h2>
+      <p>本系統內含大規模檢測試題機密計量數據，請先登入管理員身分以解鎖功能。</p>
+
+      <form @submit.prevent="handleLogin">
+        <div class="input-field">
+          <label for="accInput">管理員帳號</label>
+          <input id="accInput" type="text" v-model="loginForm.account" placeholder="請輸入管理者帳號" autofocus>
+        </div>
+        <div class="input-field">
+          <label for="pwdInput">認證密碼</label>
+          <input id="pwdInput" type="password" v-model="loginForm.password" placeholder="請輸入認證密碼">
+        </div>
+        <button type="submit" class="login-btn">驗證並進入系統</button>
+      </form>
+
+      <div v-if="loginError" class="login-err">
+        ⚠️ 帳號或密碼錯誤，請重新確認！
+      </div>
+    </div>
+  </main>
+
+  <!-- 2. 已登入視圖 -->
+  <main v-else class="container">
+
+    <!-- 提示訊息 -->
+    <div v-if="dataSourceNotice" class="notice-banner">
+      <span>💡 {{ dataSourceNotice }}</span>
+      <button style="background:none; border:none; cursor:pointer; font-size:0.9rem; color:#1e40af;" @click="dataSourceNotice = ''">✕</button>
+    </div>
+
+    <!-- 視圖 A: 試題統計分析看板 -->
+    <div v-if="currentTab === 'dashboard'">
+      <!-- 全卷指標卡片 -->
+      <div class="overview-grid">
+        <div class="stat-card">
+          <div class="label">測驗題數 / 平均通過率 (P)</div>
+          <div class="val">{{ items.length }} 題 / {{ avgP }}</div>
+          <div class="desc">整體難度偏難 (P 介於 0.24 ~ 0.72)</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">全卷平均鑑別度 (D)</div>
+          <div class="val">{{ avgD }}</div>
+          <div class="desc">鑑別力整體優良 (80% 試題 D ≥ 0.30)</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">綠燈題數 (優良正常)</div>
+          <div class="val" style="color: var(--success)">{{ countLight('綠燈') }} 題</div>
+          <div class="desc">佔全卷 80%，試題運作良好</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">黃燈 / 紅燈關注題數</div>
+          <div class="val" style="color: var(--danger)">{{ countLight('黃燈') }} / {{ countLight('紅燈') }} 題</div>
+          <div class="desc">紅燈：第 22 題 (瑕疵)、第 24 題 (迷思)</div>
+        </div>
+      </div>
+
+      <!-- 題號切換控制器 -->
+      <div class="controls-panel">
+        <div class="selector-group">
+          <label for="dashSelect" style="font-weight: 700; color: var(--primary);">📌 選擇檢視試題：</label>
+          <select id="dashSelect" class="select-dropdown" v-model="selectedId">
+            <option v-for="item in items" :key="item.id" :value="item.id">
+              第 {{ item.id }} 題【正解 {{ item.answer }}】P={{ item.p }} / D={{ item.d }} ({{ item.topic }})
+            </option>
+          </select>
+        </div>
+
+        <div class="quick-chips">
+          <button 
+            v-for="item in items" 
+            :key="item.id"
+            class="chip-btn"
+            :class="{
+              active: item.id === selectedId,
+              'danger-tag': item.light && item.light.includes('紅燈'),
+              'warning-tag': item.light && item.light.includes('黃燈')
+            }"
+            @click="selectedId = item.id"
+            :title="'第 ' + item.id + ' 題: ' + item.topic"
+          >
+            {{ item.id }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 核心雙欄分析展示 -->
+      <div v-if="curItem && curItem.distributions" class="detail-container">
+        <!-- 左欄：試題題幹、實體插圖與選項 -->
+        <div class="panel-card">
+          <div class="card-title">
+            <span>第 {{ curItem.id }} 題 原始試題與選項</span>
+            <span class="badge" :class="getBadgeClass(curItem.light)">{{ curItem.light }}</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            單元領域：<strong style="color: var(--primary);">{{ curItem.topic }}</strong>
+          </div>
+
+          <!-- 圖文並列區 -->
+          <div class="q-main-layout">
+            <div class="q-text-column">
+              {{ curItem.content }}
+            </div>
+            
+            <!-- 插圖展示 (優先顯示當前記憶體預覽或實體路徑) -->
+            <div v-if="getDisplayImage(curItem)" class="q-image-column">
+              <img 
+                v-if="!imageLoadErrors[curItem.id]"
+                :src="getDisplayImage(curItem)" 
+                :alt="'第 ' + curItem.id + ' 題插圖'"
+                @click="zoomImg = getDisplayImage(curItem)"
+                @error="imageLoadErrors[curItem.id] = true"
+                title="點擊放大檢視"
+              >
+              <div v-else class="img-missing-box">
+                <div style="font-weight:700; margin-bottom:4px;">🖼️ 待置入圖檔</div>
+                <div>路徑：{{ curItem.image }}</div>
+                <div style="font-size:0.75rem; color:#b45309; margin-top:4px;">(請將下載的 q{{ curItem.id }}.png 存入專案 images/ 資料夾)</div>
+              </div>
+              <div v-if="!imageLoadErrors[curItem.id]" class="img-zoom-tip">🔍 點擊圖片可放大檢視</div>
+            </div>
+          </div>
+
+          <!-- 選項清單 -->
+          <div class="options-list">
+            <div 
+              v-for="(opt, idx) in curItem.options" 
+              :key="idx" 
+              class="opt-item"
+              :class="{ 'is-correct': (idx + 1) === curItem.answer }"
+            >
+              <div class="opt-idx">{{ idx + 1 }}</div>
+              <div class="opt-text">{{ opt }}</div>
+              <span v-if="(idx + 1) === curItem.answer" class="opt-tag">✓ 正解</span>
+            </div>
+          </div>
+
+          <!-- 難度指標卡 -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+              <span style="font-size: 0.8rem; color: var(--text-muted);">通過率 (P)</span>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--primary); font-family: monospace;">
+                {{ curItem.p }}
+              </div>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">{{ curItem.p_level }}</span>
+            </div>
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+              <span style="font-size: 0.8rem; color: var(--text-muted);">鑑別度 (D)</span>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--accent); font-family: monospace;">
+                {{ curItem.d }}
+              </div>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">{{ curItem.d_level }}</span>
+            </div>
+          </div>
+
+          <!-- 教育認知與迷思診斷 -->
+          <div class="diag-box" :class="getDiagBoxClass(curItem.light)">
+            <div style="font-weight: 700; margin-bottom: 4px;">🧠 專家計量與迷思概念分析：</div>
+            <div>{{ curItem.diagnosis }}</div>
+          </div>
+        </div>
+
+        <!-- 右欄：六群能力選項作答分佈圖表 -->
+        <div class="panel-card">
+          <div class="card-title">
+            <span>六群能力作答分佈 (%)</span>
+            <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">全體、精熟、基礎、待加強、高低分組</span>
+          </div>
+
+          <div class="legend-row">
+            <div class="legend-item"><span class="legend-color seg-1"></span> 選項 1</div>
+            <div class="legend-item"><span class="legend-color seg-2"></span> 選項 2</div>
+            <div class="legend-item"><span class="legend-color seg-3"></span> 選項 3</div>
+            <div class="legend-item"><span class="legend-color seg-4"></span> 選項 4</div>
+            <div class="legend-item"><span class="legend-color seg-5"></span> 其它/未答</div>
+          </div>
+
+          <div class="mini-bar-container">
+            <div v-for="groupName in ['全體', '精熟', '基礎', '待加強', '高分組', '低分組']" :key="groupName" class="mini-bar-row">
+              <div class="mini-bar-label">{{ groupName }}</div>
+              <div class="mini-bar-track">
+                <div 
+                  v-for="(val, optIdx) in (curItem.distributions[groupName] || [])" 
+                  :key="optIdx"
+                  :class="'bar-seg seg-' + (optIdx + 1)"
+                  :style="{ width: val + '%' }"
+                  :title="'選項 ' + (optIdx < 4 ? optIdx+1 : '其它') + ': ' + val + '%'"
+                >
+                  <span v-if="val >= 8">{{ val }}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <table class="dist-table">
+            <thead>
+              <tr>
+                <th>群組</th>
+                <th>選項 1</th>
+                <th>選項 2</th>
+                <th>選項 3</th>
+                <th>選項 4</th>
+                <th>其它</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="groupName in ['全體', '精熟', '基礎', '待加強', '高分組', '低分組']" :key="groupName">
+                <td style="font-weight: 700;">{{ groupName }}</td>
+                <td 
+                  v-for="(val, optIdx) in (curItem.distributions[groupName] ? curItem.distributions[groupName].slice(0, 4) : [])" 
+                  :key="optIdx"
+                  :class="{
+                    'correct-col': (optIdx + 1) === curItem.answer,
+                    'high-distractor': (optIdx + 1) !== curItem.answer && val >= 30
+                  }"
+                >
+                  {{ val }}%
+                </td>
+                <td>{{ curItem.distributions[groupName] ? curItem.distributions[groupName][4] : 0 }}%</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 14px; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;">
+            * 標註 <span style="background:#dcfce7; color:#166534; font-weight:700; padding:2px 4px; border-radius:3px;">綠色底</span> 者為正解；標註 <span style="background:#fee2e2; color:#991b1b; font-weight:700; padding:2px 4px; border-radius:3px;">紅色底</span> 者為選擇率達 30% 以上之強力干擾誘答項。
+          </div>
+        </div>
+      </div>
+
+      <!-- 全卷 25 題總覽矩陣表 -->
+      <div class="master-table-section">
+        <div class="card-title">
+          <span>全卷 25 題試題品質快速導覽總表</span>
+          <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">點擊表格任意行即可即時載入該題詳細分析</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="master-table">
+            <thead>
+              <tr>
+                <th>題號</th>
+                <th>單元領域</th>
+                <th>實體插圖</th>
+                <th>正解</th>
+                <th>通過率 (P)</th>
+                <th>難度級別</th>
+                <th>鑑別度 (D)</th>
+                <th>鑑別級別</th>
+                <th>品質判定</th>
+                <th>認知診斷摘要</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr 
+                v-for="item in items" 
+                :key="item.id"
+                :class="{ 'selected-tr': item.id === selectedId }"
+                @click="selectedId = item.id"
+              >
+                <td style="font-weight: 700;">第 {{ item.id }} 題</td>
+                <td style="text-align: left;">{{ item.topic }}</td>
+                <td>
+                  <span v-if="getDisplayImage(item)" style="color: var(--success); font-weight: 700;">✓ 有</span>
+                  <span v-else style="color: var(--text-muted); font-size: 0.78rem;">-</span>
+                </td>
+                <td style="font-weight: 700; color: var(--primary);">{{ item.answer }}</td>
+                <td style="font-family: monospace;">{{ item.p }}</td>
+                <td>{{ item.p_level ? item.p_level.split(' ')[0] : '-' }}</td>
+                <td style="font-family: monospace; font-weight: 700;">{{ item.d }}</td>
+                <td>{{ item.d_level ? item.d_level.split(' ')[0] : '-' }}</td>
+                <td>
+                  <span class="badge" :class="getBadgeClass(item.light)">{{ item.light ? item.light.split(' ')[0] : '正常' }}</span>
+                </td>
+                <td style="text-align: left; max-width: 320px; font-size: 0.8rem; color: var(--text-muted); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                  {{ item.diagnosis }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 視圖 B: 題目題幹與智慧貼圖後台 -->
+    <div v-else-if="currentTab === 'admin'">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="color: var(--primary); font-size: 1.35rem;">⚙️ 試題文字與智慧貼圖管理後台</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            在此可編修各題題幹、選項、教學診斷。當您在下方貼上剪貼簿圖片時，系統會自動轉換為實體路徑（如 <code>images/q5.png</code>）並提供一鍵下載圖片！
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-action btn-success" @click="exportJsonFile">
+            💾 匯出最新 items_data.json
+          </button>
+          <button class="btn-action btn-outline" @click="resetToDefault">
+            🔄 還原為原始題本
+          </button>
+        </div>
+      </div>
+
+      <!-- 題號選擇切換列 -->
+      <div class="controls-panel" style="margin-bottom: 20px;">
+        <div class="selector-group">
+          <label for="adminSelect" style="font-weight: 700; color: var(--primary);">選擇編修題目：</label>
+          <select id="adminSelect" class="select-dropdown" v-model="adminSelectedId" @change="loadAdminForm">
+            <option v-for="item in items" :key="item.id" :value="item.id">
+              第 {{ item.id }} 題 ({{ item.topic }}) - {{ (item.image || pastedPreviews[item.id]) ? '【已設圖檔】' : '【無圖檔】' }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 雙欄：左欄編輯題幹，右欄智慧貼圖與路徑管理 -->
+      <div class="admin-container">
+        <!-- 左面板：題幹文字與選項編修 -->
+        <div class="admin-card">
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid var(--border); padding-bottom: 8px;">
+            📝 題幹文字與選項設定
+          </h3>
+
+          <div class="input-field">
+            <label>單元學習領域 / 主題</label>
+            <input type="text" v-model="editForm.topic" placeholder="例：分數的乘除運算">
+          </div>
+
+          <div class="input-field">
+            <label>題目完整題幹 (可換行)</label>
+            <textarea rows="5" v-model="editForm.content" placeholder="請輸入題幹文字內容..."></textarea>
+          </div>
+
+          <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);">
+            四個選項文字與正解標記：
+          </div>
+
+          <div v-for="(opt, idx) in editForm.options" :key="idx" class="input-field" style="margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: 700; font-size: 0.9rem; width: 60px;">選項 {{ idx + 1 }}:</span>
+              <input type="text" v-model="editForm.options[idx]" :placeholder="'選項 ' + (idx + 1) + ' 內容'" style="flex: 1;">
+              <label style="font-size: 0.8rem; margin: 0; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                <input type="radio" :value="idx + 1" v-model="editForm.answer" name="correctOptRadio">
+                設為正解
+              </label>
+            </div>
+          </div>
+
+          <div class="input-field" style="margin-top: 14px;">
+            <label>專家認知迷思與教學診斷說明</label>
+            <textarea rows="3" v-model="editForm.diagnosis" placeholder="請輸入該題評析與診斷..."></textarea>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <button class="btn-action btn-primary" style="width: 100%;" @click="saveQuestionEdits(true)">
+              💾 儲存本題文字設定
+            </button>
+          </div>
+        </div>
+
+        <!-- 右面板：剪貼簿智慧貼圖與路徑管理 -->
+        <div class="admin-card">
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid var(--border); padding-bottom: 8px;">
+            🖼️ 智慧剪貼簿貼圖與實體路徑
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 10px;">
+            點擊下方藍色框線後，直接按下 <strong>Ctrl + V</strong> 貼上截圖。系統將<strong>自動命名為 <code>images/q{{ adminSelectedId }}.png</code></strong> 並自動帶入路徑：
+          </p>
+
+          <div 
+            class="paste-drop-zone"
+            tabindex="0"
+            @paste="handlePaste"
+            @dragover.prevent="dragover = true"
+            @dragleave.prevent="dragover = false"
+            @drop.prevent="handleDrop"
+            :class="{ dragover: dragover }"
+          >
+            <div style="font-size: 2.4rem; margin-bottom: 4px;">📋</div>
+            <p style="font-weight: 700; font-size: 1rem;">點擊此處並按下 <code>Ctrl + V</code> 貼上剪貼簿截圖</p>
+            <p style="font-size: 0.82rem; color: #475569;">自動對應路徑：<code>images/q{{ adminSelectedId }}.png</code></p>
+          </div>
+
+          <div class="input-field" style="margin-top: 16px;">
+            <label>對應的實體圖片路徑 (自動產生或手動修改)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" v-model="editForm.image" placeholder="例：images/q5.png" style="flex: 1;">
+              <button class="btn-action btn-primary" @click="saveQuestionEdits(true)">更新路徑</button>
+            </div>
+          </div>
+
+          <!-- 圖片即時預覽與一鍵下載圖檔區 -->
+          <div v-if="getAdminPreviewImage()" style="margin-top: 18px; background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <img :src="getAdminPreviewImage()" alt="預覽圖" style="max-width: 130px; max-height: 90px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border); background: white;">
+              <div>
+                <div style="font-size: 0.82rem; color: var(--success); font-weight: 700;">✓ 已就緒路徑：{{ editForm.image }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">(點擊下載後存入本機 images/ 資料夾)</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button v-if="pastedPreviews[adminSelectedId]" class="btn-action btn-success" style="font-size:0.82rem;" @click="downloadCurrentImageFile">
+                📥 下載 q{{ adminSelectedId }}.png
+              </button>
+              <button class="btn-action btn-danger" style="font-size:0.82rem;" @click="removeImagePath">
+                🗑️ 清除圖片路徑
+              </button>
+            </div>
+          </div>
+          <div v-else style="margin-top: 16px; padding: 14px; background: #f1f5f9; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+            ℹ️ 第 {{ adminSelectedId }} 題尚未設定圖片。貼上截圖後，點擊「下載圖檔」存入專案的 <code>images/</code> 資料夾即可！
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 圖片放大燈箱 Modal -->
+  <div v-if="zoomImg" class="modal-overlay" @click="zoomImg = null">
+    <div class="modal-content" @click.stop>
+      <button class="modal-close" @click="zoomImg = null">✕</button>
+      <img :src="zoomImg" alt="插圖放大檢視">
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const EMBEDDED_FALLBACK_DATA = [
+  {
+    "id": 1,
+    "content": "已知 42 的倍數有 42、84、126、168、210……下列何者是 28 和 42 的最小公倍數？",
+    "options": [
+      "7",
+      "14",
+      "84",
+      "168"
+    ],
+    "answer": 3,
+    "topic": "因數與倍數（公倍數與最小公倍數）",
+    "p": 0.55,
+    "d": 0.53,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "正答率 55%，鑑別度 0.53。主要錯誤集中在選項 1（31%，低分組高達 48%），學生將「公因數/公倍數」混淆，誤選最大公因數 14 的因數或將 7/14 當成倍數概念。",
+    "distributions": {
+      "全體": [
+        31.0,
+        7.0,
+        55.0,
+        7.0,
+        0.0
+      ],
+      "精熟": [
+        6.0,
+        1.0,
+        89.0,
+        4.0,
+        0.0
+      ],
+      "基礎": [
+        30.0,
+        4.0,
+        59.0,
+        7.0,
+        0.0
+      ],
+      "待加強": [
+        49.0,
+        16.0,
+        26.0,
+        9.0,
+        0.0
+      ],
+      "高分組": [
+        11.0,
+        1.0,
+        82.0,
+        5.0,
+        0.0
+      ],
+      "低分組": [
+        48.0,
+        15.0,
+        29.0,
+        8.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 2,
+    "content": "請問「1 ÷ 7」商算到小數點後第三位時的餘數為何？",
+    "options": [
+      "0.0006",
+      "0.006",
+      "0.06",
+      "0.6"
+    ],
+    "answer": 2,
+    "topic": "小數除法（商與餘數的位值）",
+    "p": 0.63,
+    "d": 0.4,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "正答率 63%，鑑別度 0.40。1÷7=0.142...餘 0.006。部分學生對餘數小數點對齊被除數小數點的位值概念不牢，誤選 0.06 或 0.0006。",
+    "distributions": {
+      "全體": [
+        11.0,
+        63.0,
+        17.0,
+        9.0,
+        0.0
+      ],
+      "精熟": [
+        7.0,
+        88.0,
+        4.0,
+        1.0,
+        0.0
+      ],
+      "基礎": [
+        12.0,
+        67.0,
+        14.0,
+        7.0,
+        0.0
+      ],
+      "待加強": [
+        11.0,
+        39.0,
+        31.0,
+        19.0,
+        0.0
+      ],
+      "高分組": [
+        9.0,
+        83.0,
+        6.0,
+        2.0,
+        0.0
+      ],
+      "低分組": [
+        11.0,
+        43.0,
+        30.0,
+        17.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 3,
+    "content": "將下列三個算式合併成一個算式：\n750 + 599 = 1349\n1349 × 5 = 6745\n7000 - 6745 = 255\n下列哪個選項正確？",
+    "options": [
+      "750 + 599 × 5 - 7000 = 255",
+      "(750 + 599) × 5 - 7000 = 255",
+      "7000 - 750 + 599 × 5 = 255",
+      "7000 - (750 + 599) × 5 = 255"
+    ],
+    "answer": 4,
+    "topic": "整數四則混合運算（併式與括號）",
+    "p": 0.7,
+    "d": 0.48,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "正答率 70%，鑑別度 0.48。選項 2 佔 22%（待加強群高達 39%），錯誤在於被減數與減數顛倒（拿積減 7000），反映運算順序與主客關係迷思。",
+    "distributions": {
+      "全體": [
+        4.0,
+        22.0,
+        5.0,
+        70.0,
+        0.0
+      ],
+      "精熟": [
+        0.0,
+        4.0,
+        0.0,
+        95.0,
+        0.0
+      ],
+      "基礎": [
+        2.0,
+        19.0,
+        3.0,
+        77.0,
+        0.0
+      ],
+      "待加強": [
+        10.0,
+        39.0,
+        11.0,
+        39.0,
+        1.0
+      ],
+      "高分組": [
+        0.0,
+        7.0,
+        1.0,
+        92.0,
+        0.0
+      ],
+      "低分組": [
+        9.0,
+        36.0,
+        10.0,
+        44.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 4,
+    "content": "「鉛筆一枝賣 39 元，哥哥早上買了 99 枝，下午又買了 1 枝，共花了多少元？」下列哪個算式無法算出正確答案？",
+    "options": [
+      "39 × (99 + 1)",
+      "39 × 99 + 39",
+      "39 × 99 + 99",
+      "39 × 1 + 39 × 99"
+    ],
+    "answer": 3,
+    "topic": "四則運算規律（乘法對加法的分配律）",
+    "p": 0.72,
+    "d": 0.53,
+    "p_level": "偏易 (P > 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "全卷最易題（通過率 72%，鑑別度 0.53）。選項 3 誤把單價 39 寫成數量 99，考查分配律的意義化理解。",
+    "distributions": {
+      "全體": [
+        14.0,
+        7.0,
+        72.0,
+        7.0,
+        0.0
+      ],
+      "精熟": [
+        2.0,
+        1.0,
+        98.0,
+        0.0,
+        0.0
+      ],
+      "基礎": [
+        9.0,
+        6.0,
+        81.0,
+        4.0,
+        0.0
+      ],
+      "待加強": [
+        31.0,
+        13.0,
+        38.0,
+        18.0,
+        1.0
+      ],
+      "高分組": [
+        3.0,
+        1.0,
+        96.0,
+        1.0,
+        0.0
+      ],
+      "低分組": [
+        28.0,
+        13.0,
+        42.0,
+        16.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 5,
+    "content": "將一個長方體放在一個斜板上，斜板的面為 E 面，請問長方體有多少個面和 E 面垂直？",
+    "options": [
+      "0",
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 4,
+    "topic": "空間與立體形體（長方體面與面的垂直關係）",
+    "p": 0.63,
+    "d": 0.42,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 63%，鑑別度 0.42。長方體底面貼於 E 面時，四周的 4 個側面皆與底面（即 E 面所在的平面）垂直。誤選 2 面者為將視角侷限於橫向切面。",
+    "distributions": {
+      "全體": [
+        13.0,
+        17.0,
+        6.0,
+        63.0,
+        0.0
+      ],
+      "精熟": [
+        6.0,
+        6.0,
+        0.0,
+        88.0,
+        0.0
+      ],
+      "基礎": [
+        13.0,
+        14.0,
+        3.0,
+        69.0,
+        0.0
+      ],
+      "待加強": [
+        18.0,
+        30.0,
+        14.0,
+        38.0,
+        1.0
+      ],
+      "高分組": [
+        9.0,
+        7.0,
+        1.0,
+        83.0,
+        0.0
+      ],
+      "低分組": [
+        17.0,
+        28.0,
+        12.0,
+        41.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 6,
+    "content": "下圖是學校視聽教室的座位編號圖（走道左右分單雙號排序）。甲說：A 座位的編號是奇數；乙說：編號 30 的座位在走道旁邊；丙說：B 座位的後方座位編號是 25。請問哪些人的說法正確？",
+    "options": [
+      "只有乙",
+      "只有丙",
+      "只有甲和乙",
+      "只有乙和丙"
+    ],
+    "answer": 1,
+    "topic": "生活情境數列與規律判讀",
+    "p": 0.67,
+    "d": 0.49,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 67%，鑑別度 0.49。題幹考查左右兩側奇偶數與遞增規律，誘答項 3 佔 13%、4 佔 11%，反映部分學生未仔細驗證甲與丙之推論。",
+    "distributions": {
+      "全體": [
+        67.0,
+        11.0,
+        13.0,
+        8.0,
+        0.0
+      ],
+      "精熟": [
+        92.0,
+        3.0,
+        2.0,
+        3.0,
+        0.0
+      ],
+      "基礎": [
+        75.0,
+        9.0,
+        9.0,
+        6.0,
+        0.0
+      ],
+      "待加強": [
+        36.0,
+        20.0,
+        28.0,
+        15.0,
+        0.0
+      ],
+      "高分組": [
+        89.0,
+        4.0,
+        3.0,
+        4.0,
+        0.0
+      ],
+      "低分組": [
+        40.0,
+        19.0,
+        26.0,
+        14.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 7,
+    "content": "請問「2.05 兆」是「2.05 萬」的多少倍？",
+    "options": [
+      "1 萬",
+      "1 千萬",
+      "1 億",
+      "10 億"
+    ],
+    "answer": 3,
+    "topic": "大數的十進位結構與位值換算",
+    "p": 0.31,
+    "d": 0.24,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "尚可 (0.20 ≤ D < 0.30)",
+    "light": "黃燈 (觀察/微調)",
+    "diagnosis": "【黃燈題】通過率僅 31%，鑑別度 0.24。高達 40% 的學生誤選選項 2（1千萬），甚至高分組亦有 38% 誤選！學生常背誦「個、萬、億、兆」，直接以相隔二級聯想為萬×萬＝億（10^4×10^4=10^8），但對級距換算不熟，誤以為萬到兆是 1000 萬倍。",
+    "distributions": {
+      "全體": [
+        12.0,
+        40.0,
+        31.0,
+        17.0,
+        0.0
+      ],
+      "精熟": [
+        8.0,
+        31.0,
+        56.0,
+        5.0,
+        0.0
+      ],
+      "基礎": [
+        11.0,
+        44.0,
+        29.0,
+        16.0,
+        0.0
+      ],
+      "待加強": [
+        16.0,
+        37.0,
+        20.0,
+        27.0,
+        0.0
+      ],
+      "高分組": [
+        10.0,
+        38.0,
+        45.0,
+        7.0,
+        0.0
+      ],
+      "低分組": [
+        15.0,
+        38.0,
+        21.0,
+        26.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 8,
+    "content": "長方形甲的長是 230 公分，寬是 1025 公分，面積為 235750 平方公分。改以公尺計算（2.3 公尺 × 10.25 公尺），長方形甲的面積是多少平方公尺？",
+    "options": [
+      "2.3575",
+      "23.575",
+      "235.75",
+      "2357.5"
+    ],
+    "answer": 2,
+    "topic": "小數乘法與面積單位換算（平方公尺與平方公分）",
+    "p": 0.58,
+    "d": 0.27,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "尚可 (0.20 ≤ D < 0.30)",
+    "light": "黃燈 (觀察/微調)",
+    "diagnosis": "【黃燈題】通過率 58%，鑑別度 0.27。選項 3 佔 28%（高分組亦有 19% 誤選）。迷思原因：學生常誤記「1 平方公尺 = 1000 平方公分」或小數點直接依 100 移兩位得到 235.75，忽視了 1 平方公尺 = 10000 平方公分。",
+    "distributions": {
+      "全體": [
+        5.0,
+        58.0,
+        28.0,
+        9.0,
+        0.0
+      ],
+      "精熟": [
+        1.0,
+        75.0,
+        20.0,
+        3.0,
+        0.0
+      ],
+      "基礎": [
+        3.0,
+        61.0,
+        28.0,
+        7.0,
+        0.0
+      ],
+      "待加強": [
+        12.0,
+        41.0,
+        31.0,
+        15.0,
+        1.0
+      ],
+      "高分組": [
+        2.0,
+        70.0,
+        24.0,
+        4.0,
+        0.0
+      ],
+      "低分組": [
+        11.0,
+        44.0,
+        31.0,
+        14.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 9,
+    "content": "下圖是由 4 個全等的等腰直角三角形所組成的圖形。請問角 A 是多少度？",
+    "options": [
+      "145",
+      "135",
+      "125",
+      "120"
+    ],
+    "answer": 2,
+    "topic": "三角形內角與幾何角度組合",
+    "p": 0.66,
+    "d": 0.51,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 66%，鑑別度 0.51。等腰直角三角形底角 45°，角 A = 180° - 45° = 135°（平角互補）。運作優良，有效鑑別中高程度學生。",
+    "distributions": {
+      "全體": [
+        14.0,
+        66.0,
+        8.0,
+        11.0,
+        0.0
+      ],
+      "精熟": [
+        2.0,
+        96.0,
+        0.0,
+        2.0,
+        0.0
+      ],
+      "基礎": [
+        12.0,
+        72.0,
+        6.0,
+        9.0,
+        0.0
+      ],
+      "待加強": [
+        25.0,
+        35.0,
+        18.0,
+        21.0,
+        0.0
+      ],
+      "高分組": [
+        4.0,
+        90.0,
+        2.0,
+        3.0,
+        0.0
+      ],
+      "低分組": [
+        24.0,
+        40.0,
+        16.0,
+        20.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 10,
+    "content": "請問下列哪種立體形體有 12 條邊？",
+    "options": [
+      "四角柱",
+      "五角錐",
+      "六角柱",
+      "十二角錐"
+    ],
+    "answer": 1,
+    "topic": "角柱與角錐的構成要素（邊數規律）",
+    "p": 0.64,
+    "d": 0.6,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 64%，鑑別度 0.60。四角柱邊數 = 4 × 3 = 12。誘答項 3（六角柱，邊數 18）佔 21%，學生常誤把「角數乘以2」或將面的個數與邊數公式混淆。",
+    "distributions": {
+      "全體": [
+        64.0,
+        3.0,
+        21.0,
+        13.0,
+        0.0
+      ],
+      "精熟": [
+        95.0,
+        0.0,
+        4.0,
+        1.0,
+        0.0
+      ],
+      "基礎": [
+        72.0,
+        1.0,
+        18.0,
+        9.0,
+        0.0
+      ],
+      "待加強": [
+        27.0,
+        8.0,
+        36.0,
+        28.0,
+        1.0
+      ],
+      "高分組": [
+        91.0,
+        0.0,
+        7.0,
+        2.0,
+        0.0
+      ],
+      "低分組": [
+        31.0,
+        7.0,
+        35.0,
+        27.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 11,
+    "content": "如圖，下列哪個算式可以算出塗色部分三角形的面積是多少平方公分？（鈍角三角形以 a 為底，c 為對應高）",
+    "options": [
+      "a × c",
+      "a × c ÷ 2",
+      "a × d ÷ 2",
+      "(a + b) × c ÷ 2"
+    ],
+    "answer": 2,
+    "topic": "三角形面積（鈍角三角形的高與底邊判斷）",
+    "p": 0.36,
+    "d": 0.44,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "【極難鑑別題】通過率 36%，鑑別度 0.44。選項 3（底×斜邊/2）佔 32%，選項 4（梯形或大三角形底）佔 27%。學生對「鈍角三角形的高在外部、垂直於底邊延長線」概念極為薄弱。",
+    "distributions": {
+      "全體": [
+        5.0,
+        36.0,
+        32.0,
+        27.0,
+        0.0
+      ],
+      "精熟": [
+        2.0,
+        76.0,
+        11.0,
+        10.0,
+        0.0
+      ],
+      "基礎": [
+        3.0,
+        35.0,
+        35.0,
+        27.0,
+        0.0
+      ],
+      "待加強": [
+        10.0,
+        17.0,
+        37.0,
+        36.0,
+        0.0
+      ],
+      "高分組": [
+        3.0,
+        62.0,
+        20.0,
+        15.0,
+        0.0
+      ],
+      "低分組": [
+        9.0,
+        19.0,
+        37.0,
+        36.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 12,
+    "content": "下列哪個算式的答案和其它三個算式的答案不一樣？",
+    "options": [
+      "21 × 63 ÷ 3",
+      "21 ÷ 3 × 63",
+      "63 × 3 ÷ 21",
+      "63 ÷ 3 × 21"
+    ],
+    "answer": 3,
+    "topic": "乘除混合運算的運算性質與結合律",
+    "p": 0.63,
+    "d": 0.5,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 63%，鑑別度 0.50。選項 3 算式顛倒了乘數與除數（變成乘 3 除 21），鑑別度良好。",
+    "distributions": {
+      "全體": [
+        13.0,
+        12.0,
+        63.0,
+        12.0,
+        0.0
+      ],
+      "精熟": [
+        2.0,
+        2.0,
+        92.0,
+        4.0,
+        0.0
+      ],
+      "基礎": [
+        11.0,
+        10.0,
+        68.0,
+        10.0,
+        0.0
+      ],
+      "待加強": [
+        23.0,
+        22.0,
+        34.0,
+        20.0,
+        0.0
+      ],
+      "高分組": [
+        5.0,
+        3.0,
+        87.0,
+        5.0,
+        0.0
+      ],
+      "低分組": [
+        22.0,
+        22.0,
+        37.0,
+        19.0,
+        0.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 13,
+    "content": "算算看，360 - 120 ÷ (4 + 6 × 6) = ？",
+    "options": [
+      "358",
+      "357",
+      "6",
+      "4"
+    ],
+    "answer": 2,
+    "topic": "整數四則混合運算（括號與先乘除後加減）",
+    "p": 0.37,
+    "d": 0.46,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "【極難題】通過率 37%，鑑別度 0.46。括號內 4+36=40，120÷40=3，360-3=357。選項 4（佔 26%）與選項 3（佔 21%）來自低分組從左往右盲目連減運算導致。",
+    "distributions": {
+      "全體": [
+        17.0,
+        37.0,
+        21.0,
+        26.0,
+        0.0
+      ],
+      "精熟": [
+        9.0,
+        78.0,
+        7.0,
+        5.0,
+        0.0
+      ],
+      "基礎": [
+        18.0,
+        35.0,
+        21.0,
+        26.0,
+        0.0
+      ],
+      "待加強": [
+        17.0,
+        16.0,
+        27.0,
+        38.0,
+        1.0
+      ],
+      "高分組": [
+        13.0,
+        64.0,
+        12.0,
+        10.0,
+        0.0
+      ],
+      "低分組": [
+        17.0,
+        18.0,
+        27.0,
+        37.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 14,
+    "content": "紅、黃、綠色紙一樣大。紅平分2塊取1塊；黃平分4份取3份；綠平分8片取5片。誰最大、誰最小？",
+    "options": [
+      "甲最大、乙最小",
+      "乙最大、甲最小",
+      "丙最大、甲最小",
+      "丙最大、乙最小"
+    ],
+    "answer": 2,
+    "topic": "異分母分數大小比較（1/2, 3/4=6/8, 5/8）",
+    "p": 0.59,
+    "d": 0.61,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "【全卷鑑別度最高 D=0.61】通過率 59%。通分後為 4/8 < 5/8 < 6/8，即乙最大、甲最小。高分組答對率 89%，低分組僅 28%，極具鑑別力。",
+    "distributions": {
+      "全體": [
+        15.0,
+        59.0,
+        18.0,
+        8.0,
+        1.0
+      ],
+      "精熟": [
+        1.0,
+        94.0,
+        4.0,
+        1.0,
+        0.0
+      ],
+      "基礎": [
+        12.0,
+        64.0,
+        17.0,
+        6.0,
+        0.0
+      ],
+      "待加強": [
+        29.0,
+        26.0,
+        29.0,
+        15.0,
+        1.0
+      ],
+      "高分組": [
+        2.0,
+        90.0,
+        6.0,
+        2.0,
+        0.0
+      ],
+      "低分組": [
+        27.0,
+        29.0,
+        28.0,
+        14.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 15,
+    "content": "甲為半徑 10 公分的 1/6 圓，乙為半徑 5 公分的 1/3 圓。甲和乙的圓心角相差多少度？",
+    "options": [
+      "0",
+      "30",
+      "45",
+      "60"
+    ],
+    "answer": 4,
+    "topic": "扇形與圓心角（半徑為干擾訊息）",
+    "p": 0.42,
+    "d": 0.59,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 42%，鑑別度 0.59。甲圓心角 60°，乙圓心角 120°，相差 60°。選項 2（30°）佔 24%，學生受到半徑 10 與 5 倍數關係干擾產生計算誤差。",
+    "distributions": {
+      "全體": [
+        16.0,
+        24.0,
+        18.0,
+        42.0,
+        1.0
+      ],
+      "精熟": [
+        8.0,
+        4.0,
+        2.0,
+        87.0,
+        0.0
+      ],
+      "基礎": [
+        18.0,
+        22.0,
+        17.0,
+        42.0,
+        1.0
+      ],
+      "待加強": [
+        16.0,
+        39.0,
+        29.0,
+        15.0,
+        1.0
+      ],
+      "高分組": [
+        12.0,
+        8.0,
+        5.0,
+        75.0,
+        0.0
+      ],
+      "低分組": [
+        16.0,
+        38.0,
+        29.0,
+        16.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 16,
+    "content": "甲是 16 的因數，甲也是 16 的倍數。下列關於甲的敘述何者不正確？",
+    "options": [
+      "甲是 8 的倍數",
+      "甲的因數有奇數個",
+      "4 是甲的因數",
+      "32 是甲的因數"
+    ],
+    "answer": 4,
+    "topic": "因數與倍數性質（既是因數又是倍數即本身）",
+    "p": 0.42,
+    "d": 0.5,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 42%，鑑別度 0.50。甲必為 16。16 的因數為 1,2,4,8,16 共 5 個（奇數個）。高達 33% 學生誤選選項 2，因不清楚「完全平方數的因數個數必為奇數」。",
+    "distributions": {
+      "全體": [
+        13.0,
+        33.0,
+        12.0,
+        42.0,
+        1.0
+      ],
+      "精熟": [
+        2.0,
+        12.0,
+        3.0,
+        83.0,
+        0.0
+      ],
+      "基礎": [
+        12.0,
+        35.0,
+        11.0,
+        42.0,
+        1.0
+      ],
+      "待加強": [
+        20.0,
+        40.0,
+        20.0,
+        19.0,
+        1.0
+      ],
+      "高分組": [
+        5.0,
+        19.0,
+        5.0,
+        71.0,
+        0.0
+      ],
+      "低分組": [
+        20.0,
+        40.0,
+        18.0,
+        21.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 17,
+    "content": "下圖由 64 個全等小平行四邊形拼成。甲（底 1、高 2）面積 21，求乙（底 4、高 1）面積是多少平方公分？",
+    "options": [
+      "21",
+      "42",
+      "63",
+      "84"
+    ],
+    "answer": 2,
+    "topic": "平行四邊形面積（格網底與高的比例變換）",
+    "p": 0.42,
+    "d": 0.27,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "尚可 (0.20 ≤ D < 0.30)",
+    "light": "黃燈 (觀察/微調)",
+    "diagnosis": "【黃燈題】通過率 42%，鑑別度 0.27。小平行四邊形面積為 21÷2=10.5，乙面積為 4×1×10.5=42。選項 1（21）佔 21%，選項 3（63）佔 22%，學生對斜格網高之計數迷思嚴重。",
+    "distributions": {
+      "全體": [
+        21.0,
+        42.0,
+        22.0,
+        15.0,
+        1.0
+      ],
+      "精熟": [
+        12.0,
+        65.0,
+        12.0,
+        11.0,
+        1.0
+      ],
+      "基礎": [
+        20.0,
+        42.0,
+        22.0,
+        14.0,
+        1.0
+      ],
+      "待加強": [
+        26.0,
+        28.0,
+        27.0,
+        19.0,
+        1.0
+      ],
+      "高分組": [
+        16.0,
+        56.0,
+        15.0,
+        12.0,
+        1.0
+      ],
+      "低分組": [
+        25.0,
+        30.0,
+        26.0,
+        18.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 18,
+    "content": "已知甲 × 11/13 = 乙 × 1 = 丙 × 1.01 = 丁，甲丙不為 0。下列關於大小關係何者正確？",
+    "options": [
+      "甲 < 乙、丙 > 丁",
+      "甲 < 乙、丙 < 丁",
+      "甲 > 乙、丙 > 丁",
+      "甲 > 乙、丙 < 丁"
+    ],
+    "answer": 4,
+    "topic": "乘數與積的關係（大於 1、等於 1、小於 1 的乘積大小）",
+    "p": 0.43,
+    "d": 0.53,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 43%，鑑別度 0.53。乘數小於 1 則被乘數大於積（甲>乙）；乘數大於 1 則被乘數小於積（丙<丁）。選項 2 佔 23%，學生常反向誤判。",
+    "distributions": {
+      "全體": [
+        16.0,
+        23.0,
+        17.0,
+        43.0,
+        1.0
+      ],
+      "精熟": [
+        4.0,
+        7.0,
+        4.0,
+        84.0,
+        0.0
+      ],
+      "基礎": [
+        16.0,
+        24.0,
+        16.0,
+        43.0,
+        1.0
+      ],
+      "待加強": [
+        23.0,
+        30.0,
+        27.0,
+        19.0,
+        1.0
+      ],
+      "高分組": [
+        7.0,
+        12.0,
+        8.0,
+        73.0,
+        0.0
+      ],
+      "低分組": [
+        23.0,
+        30.0,
+        26.0,
+        20.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 19,
+    "content": "「小東訂 2 間雙人房、3 份晚餐共 7900 元。晚餐一份 500 元，1 間雙人房多少元？」下列哪個算式正確？",
+    "options": [
+      "7900 - (500 × 3) ÷ 2",
+      "7900 - 500 × 3 × 2",
+      "(7900 - 500 × 3) ÷ 2",
+      "7900 - (500 × 3 × 2)"
+    ],
+    "answer": 3,
+    "topic": "四則混合運算列式（括號之必要性）",
+    "p": 0.41,
+    "d": 0.45,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 41%，鑑別度 0.45。全體高達 45% 誤選選項 1（漏掉大括號導致除以 2 僅作用於晚餐）。基礎群有 50% 誤選，是典型的先乘除後加減與括號位準迷思。",
+    "distributions": {
+      "全體": [
+        45.0,
+        6.0,
+        41.0,
+        8.0,
+        1.0
+      ],
+      "精熟": [
+        21.0,
+        0.0,
+        77.0,
+        1.0,
+        0.0
+      ],
+      "基礎": [
+        50.0,
+        3.0,
+        41.0,
+        5.0,
+        0.0
+      ],
+      "待加強": [
+        48.0,
+        14.0,
+        18.0,
+        18.0,
+        1.0
+      ],
+      "高分組": [
+        32.0,
+        1.0,
+        66.0,
+        1.0,
+        0.0
+      ],
+      "低分組": [
+        49.0,
+        12.0,
+        21.0,
+        17.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 20,
+    "content": "下列哪個分數比 25/8 大，但是比 3又10/48 小？",
+    "options": [
+      "19/6",
+      "26/8",
+      "74/24",
+      "3又5/48"
+    ],
+    "answer": 1,
+    "topic": "分數大小比較與通分",
+    "p": 0.39,
+    "d": 0.51,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "【極難鑑別題】通過率 39%，鑑別度 0.51。25/8=3又6/48，介於 3又6/48 與 3又10/48 之間者為 19/6=3又8/48。選項 2 與 4 各分流 24%，誘答力平均且分散。",
+    "distributions": {
+      "全體": [
+        39.0,
+        24.0,
+        11.0,
+        24.0,
+        1.0
+      ],
+      "精熟": [
+        76.0,
+        13.0,
+        3.0,
+        7.0,
+        0.0
+      ],
+      "基礎": [
+        40.0,
+        26.0,
+        10.0,
+        24.0,
+        1.0
+      ],
+      "待加強": [
+        16.0,
+        28.0,
+        20.0,
+        36.0,
+        1.0
+      ],
+      "高分組": [
+        68.0,
+        16.0,
+        5.0,
+        11.0,
+        0.0
+      ],
+      "低分組": [
+        17.0,
+        29.0,
+        19.0,
+        35.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 21,
+    "content": "高鐵時刻表推算行車時間與抵達時間差（0806 車次 07:41~09:07，0612 車次 08:13~09:23）。哪兩人的說法正確？",
+    "options": [
+      "甲和乙",
+      "甲和丁",
+      "乙和丙",
+      "乙和丁"
+    ],
+    "answer": 4,
+    "topic": "時間的計算與生活時刻表判讀",
+    "p": 0.46,
+    "d": 0.59,
+    "p_level": "適中 (0.40 ≤ P ≤ 0.70)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 46%，鑑別度 0.59。行車時間 0806 為 86 分、0612 為 70 分（丁正確）；09:23-09:07=16 分（乙正確）。鑑別度高，考查跨時分進退位運算。",
+    "distributions": {
+      "全體": [
+        17.0,
+        20.0,
+        17.0,
+        46.0,
+        1.0
+      ],
+      "精熟": [
+        3.0,
+        6.0,
+        4.0,
+        86.0,
+        0.0
+      ],
+      "基礎": [
+        16.0,
+        18.0,
+        16.0,
+        48.0,
+        1.0
+      ],
+      "待加強": [
+        28.0,
+        31.0,
+        25.0,
+        16.0,
+        1.0
+      ],
+      "高分組": [
+        7.0,
+        9.0,
+        7.0,
+        77.0,
+        1.0
+      ],
+      "低分組": [
+        27.0,
+        29.0,
+        25.0,
+        18.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 22,
+    "content": "如圖，緞帶一邊對齊刻度 0，另一邊在刻度 7.54 公尺和 7.55 公尺之間。下列關於將緞帶長度取概數後的敘述何者正確？",
+    "options": [
+      "用四捨五入法取概數到個位，緞帶長度大約為 7 公尺",
+      "用四捨五入法取概數到小數點第一位，緞帶長度大約為 7.6 公尺",
+      "用四捨五入法取概數到小數點第二位，緞帶長度大約為 7.55 公尺",
+      "因為不知道緞帶的實際長度，因此無法將緞帶長度用四捨五入法取概數"
+    ],
+    "answer": 3,
+    "topic": "小數取概數（四捨五入法）",
+    "p": 0.3,
+    "d": 0.11,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "劣質 (D < 0.20)",
+    "light": "紅燈 (異常/需修訂)",
+    "diagnosis": "【紅燈題 / 試題瑕疵】通過率 30%，鑑別度僅 0.11。官方答案為 3，但若長度介於 7.540~7.544，四捨五入至小數第二位應為 7.54 而非 7.55！因此高分組高達 32% 反向選擇具邏輯批判性的選項 4，造成試題鑑別度崩跌。",
+    "distributions": {
+      "全體": [
+        14.0,
+        28.0,
+        30.0,
+        27.0,
+        1.0
+      ],
+      "精熟": [
+        6.0,
+        19.0,
+        41.0,
+        33.0,
+        0.0
+      ],
+      "基礎": [
+        12.0,
+        29.0,
+        30.0,
+        27.0,
+        1.0
+      ],
+      "待加強": [
+        22.0,
+        32.0,
+        24.0,
+        21.0,
+        1.0
+      ],
+      "高分組": [
+        7.0,
+        24.0,
+        36.0,
+        32.0,
+        1.0
+      ],
+      "低分組": [
+        21.0,
+        32.0,
+        25.0,
+        21.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 23,
+    "content": "有一個正方體大理石塊，其中一個面的面積是 4 平方公尺，請問大理石塊的體積是多少立方公尺？",
+    "options": [
+      "8",
+      "16",
+      "24",
+      "64"
+    ],
+    "answer": 1,
+    "topic": "正方體表面積與體積之關聯性",
+    "p": 0.28,
+    "d": 0.49,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "優良 (D ≥ 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 28%，鑑別度 0.49。面面積 4 則邊長為 2，體積 = 2×2×2 = 8。選項 3（24，誤算表面積 4×6）佔 34%，選項 4（64，誤以 4×4×4 算體積）佔 27%，概念混淆明確。",
+    "distributions": {
+      "全體": [
+        28.0,
+        10.0,
+        34.0,
+        27.0,
+        1.0
+      ],
+      "精熟": [
+        75.0,
+        2.0,
+        13.0,
+        9.0,
+        0.0
+      ],
+      "基礎": [
+        24.0,
+        9.0,
+        37.0,
+        29.0,
+        1.0
+      ],
+      "待加強": [
+        9.0,
+        17.0,
+        42.0,
+        31.0,
+        1.0
+      ],
+      "高分組": [
+        59.0,
+        4.0,
+        21.0,
+        15.0,
+        1.0
+      ],
+      "低分組": [
+        9.0,
+        16.0,
+        42.0,
+        31.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 24,
+    "content": "一盒餅乾 40 片，媽媽買了 2 盒餅乾，姊姊吃了 12 片，請問姊姊吃了多少盒餅乾？",
+    "options": [
+      "12/40",
+      "40/12",
+      "12/80",
+      "80/12"
+    ],
+    "answer": 1,
+    "topic": "分數的基準量與單位量意義",
+    "p": 0.24,
+    "d": 0.06,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "劣質 (D < 0.20)",
+    "light": "紅燈 (異常/需修訂)",
+    "diagnosis": "【紅燈題 / 基準量集體迷思】通過率 24%，鑑別度僅 0.06。高達 67%（高分組 69%）選選項 3（12/80）！學生將媽媽買的「2 盒全部（80片）」當作基準量，忽略題目問的是以「一盒（40片）」為單位的盒數。多餘條件干擾極大。",
+    "distributions": {
+      "全體": [
+        24.0,
+        4.0,
+        67.0,
+        4.0,
+        1.0
+      ],
+      "精熟": [
+        36.0,
+        1.0,
+        62.0,
+        1.0,
+        0.0
+      ],
+      "基礎": [
+        21.0,
+        3.0,
+        73.0,
+        2.0,
+        2.0
+      ],
+      "待加強": [
+        22.0,
+        10.0,
+        57.0,
+        9.0,
+        1.0
+      ],
+      "高分組": [
+        28.0,
+        1.0,
+        69.0,
+        1.0,
+        1.0
+      ],
+      "低分組": [
+        23.0,
+        9.0,
+        59.0,
+        8.0,
+        1.0
+      ]
+    },
+    "image": ""
+  },
+  {
+    "id": 25,
+    "content": "塗色部分是 1/3 張色紙。平分成 4 份，再將 1 份平分成 2 片。甲說：1 片色紙和 1/24 張一樣大；乙說：1/3 張色紙和 8 片一樣大。哪些正確？",
+    "options": [
+      "只有甲正確",
+      "只有乙正確",
+      "甲和乙都正確",
+      "甲和乙都不正確"
+    ],
+    "answer": 3,
+    "topic": "分數的連除與單位分數量倍數關係",
+    "p": 0.3,
+    "d": 0.39,
+    "p_level": "極難 (P < 0.40)",
+    "d_level": "良好 (0.30 ≤ D < 0.40)",
+    "light": "綠燈 (優質/良好)",
+    "diagnosis": "通過率 30%，鑑別度 0.39。1片為 (1/3)÷4÷2 = 1/24（甲正確）；8片為 8×(1/24) = 1/3（乙正確）。各選項均勻分流，考查多步驟分數運思能力。",
+    "distributions": {
+      "全體": [
+        20.0,
+        25.0,
+        30.0,
+        23.0,
+        3.0
+      ],
+      "精熟": [
+        8.0,
+        11.0,
+        70.0,
+        9.0,
+        1.0
+      ],
+      "基礎": [
+        20.0,
+        26.0,
+        26.0,
+        25.0,
+        3.0
+      ],
+      "待加強": [
+        27.0,
+        29.0,
+        17.0,
+        26.0,
+        2.0
+      ],
+      "高分組": [
+        13.0,
+        16.0,
+        56.0,
+        14.0,
+        2.0
+      ],
+      "低分組": [
+        26.0,
+        29.0,
+        17.0,
+        26.0,
+        3.0
+      ]
+    },
+    "image": ""
+  }
+];
+
+  const { createApp, ref, computed, onMounted } = Vue;
+
+  createApp({
+    setup() {
+      const items = ref(EMBEDDED_FALLBACK_DATA);
+      const dataSourceNotice = ref('');
+      
+      // 暫存剪貼簿貼上的圖片 DataURL（供即時預覽與下載）
+      const pastedPreviews = ref({});
+      const imageLoadErrors = ref({});
+
+      // 1. 登入狀態管理 (admin / 3590116)
+      const isLoggedIn = ref(sessionStorage.getItem('exam_admin_auth') === 'true');
+      const loginForm = ref({ account: '', password: '' });
+      const loginError = ref(false);
+
+      const handleLogin = () => {
+        if (loginForm.value.account === 'admin' && loginForm.value.password === '3590116') {
+          isLoggedIn.value = true;
+          sessionStorage.setItem('exam_admin_auth', 'true');
+          loginError.value = false;
+        } else {
+          loginError.value = true;
+        }
+      };
+
+      const handleLogout = () => {
+        isLoggedIn.value = false;
+        sessionStorage.removeItem('exam_admin_auth');
+        loginForm.value = { account: '', password: '' };
+      };
+
+      // 2. 視圖與選擇
+      const currentTab = ref('dashboard');
+      const selectedId = ref(24);
+      const adminSelectedId = ref(24);
+      const dragover = ref(false);
+      const zoomImg = ref(null);
+
+      // 3. 編輯表單暫存
+      const editForm = ref({
+        id: 24,
+        topic: '',
+        content: '',
+        options: ['', '', '', ''],
+        answer: 1,
+        diagnosis: '',
+        image: ''
+      });
+
+      const loadAdminForm = () => {
+        const target = items.value.find(q => q.id === adminSelectedId.value);
+        if (target) {
+          editForm.value = {
+            id: target.id,
+            topic: target.topic || '',
+            content: target.content || '',
+            options: target.options ? [...target.options] : ['', '', '', ''],
+            answer: target.answer || 1,
+            diagnosis: target.diagnosis || '',
+            image: target.image || ''
+          };
+        }
+      };
+
+      // 讀取外部 items_data.json
+      const loadItemsData = async () => {
+        const localEdited = localStorage.getItem('ks_math_items_custom');
+        if (localEdited) {
+          try {
+            items.value = JSON.parse(localEdited);
+            dataSourceNotice.value = '已載入您先前在後台自訂編修的題本資料 (來自瀏覽器本地快取)。';
+            loadAdminForm();
+            return;
+          } catch (e) {
+            console.warn('Local storage data invalid');
+          }
+        }
+
+        try {
+          const res = await fetch('./items_data.json', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              items.value = data;
+              dataSourceNotice.value = '成功讀取同目錄下的外部 items_data.json 檔案。';
+              loadAdminForm();
+              return;
+            }
+          }
+        } catch (err) {
+          console.info('Fetch items_data.json skipped or blocked (normal in file:///)');
+        }
+
+        items.value = EMBEDDED_FALLBACK_DATA;
+        dataSourceNotice.value = '目前以本機離線安全模式運行 (已啟用全套 25 題內建題庫數據)。';
+        loadAdminForm();
+      };
+
+      onMounted(() => {
+        loadItemsData();
+        const savedPreviews = localStorage.getItem('ks_math_pasted_previews');
+        if (savedPreviews) {
+          try { pastedPreviews.value = JSON.parse(savedPreviews); } catch(e){}
+        }
+      });
+
+      // 核心：剪貼簿直接貼上 (Ctrl + V)
+      const handlePaste = (e) => {
+        const itemsList = (e.clipboardData || window.clipboardData).items;
+        for (let i = 0; i < itemsList.length; i++) {
+          if (itemsList[i].type.indexOf('image') !== -1) {
+            const blob = itemsList[i].getAsFile();
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const dataUrl = event.target.result;
+              const autoPath = `images/q${adminSelectedId.value}.png`;
+              
+              // 1. 自動帶入實體路徑
+              editForm.value.image = autoPath;
+              // 2. 暫存 DataURL 供即時預覽與下載
+              pastedPreviews.value[adminSelectedId.value] = dataUrl;
+              imageLoadErrors.value[adminSelectedId.value] = false;
+              
+              try {
+                localStorage.setItem('ks_math_pasted_previews', JSON.stringify(pastedPreviews.value));
+              } catch(e) {
+                console.warn('LocalStorage quota limit reached for previews');
+              }
+
+              // 3. 自動儲存題目設定
+              saveQuestionEdits(false);
+              alert(`✨ 剪貼簿截圖已自動對應路徑「${autoPath}」！\n請點擊「下載 q${adminSelectedId.value}.png」按鈕存入專案的 images/ 資料夾。`);
+            };
+            reader.readAsDataURL(blob);
+            break;
+          }
+        }
+      };
+
+      // 拖曳上傳支援
+      const handleDrop = (e) => {
+        dragover.value = false;
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const dataUrl = event.target.result;
+            const autoPath = `images/q${adminSelectedId.value}.png`;
+            editForm.value.image = autoPath;
+            pastedPreviews.value[adminSelectedId.value] = dataUrl;
+            imageLoadErrors.value[adminSelectedId.value] = false;
+            saveQuestionEdits(false);
+            alert(`✨ 圖片已對應為實體路徑「${autoPath}」，請記得點擊下載圖檔！`);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      // 一鍵下載圖檔 (以對應題號命名為 q{id}.png)
+      const downloadCurrentImageFile = () => {
+        const dataUrl = pastedPreviews.value[adminSelectedId.value];
+        if (!dataUrl) return;
+        const filename = `q${adminSelectedId.value}.png`;
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      };
+
+      // 取得後台預覽圖片（若剛貼上有 dataURL 優先預覽，否則以 path 預覽）
+      const getAdminPreviewImage = () => {
+        return pastedPreviews.value[adminSelectedId.value] || editForm.value.image;
+      };
+
+      // 取得前台看板顯示圖片（若剛貼上未下載放資料夾，也能無縫即時預覽）
+      const getDisplayImage = (item) => {
+        if (pastedPreviews.value[item.id]) {
+          return pastedPreviews.value[item.id];
+        }
+        return item.image && item.image.trim() !== '' ? item.image : null;
+      };
+
+      // 儲存題幹與圖片路徑設定
+      const saveQuestionEdits = (showNotice = true) => {
+        const target = items.value.find(q => q.id === adminSelectedId.value);
+        if (target) {
+          target.topic = editForm.value.topic;
+          target.content = editForm.value.content;
+          target.options = [...editForm.value.options];
+          target.answer = Number(editForm.value.answer);
+          target.diagnosis = editForm.value.diagnosis;
+          target.image = editForm.value.image;
+
+          localStorage.setItem('ks_math_items_custom', JSON.stringify(items.value));
+          if (showNotice) {
+            alert(`✅ 第 ${target.id} 題文字與圖片路徑設定已成功儲存！前台看板已即時更新。`);
+          }
+        }
+      };
+
+      const removeImagePath = () => {
+        editForm.value.image = "";
+        delete pastedPreviews.value[adminSelectedId.value];
+        try {
+          localStorage.setItem('ks_math_pasted_previews', JSON.stringify(pastedPreviews.value));
+        } catch(e){}
+        saveQuestionEdits(false);
+        alert('已清除本題圖片路徑與暫存。');
+      };
+
+      // 匯出最新 JSON
+      const exportJsonFile = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(items.value, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "items_data.json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      };
+
+      // 還原原始
+      const resetToDefault = async () => {
+        if (confirm('確定要清除所有自訂設定，並還原為初始試題嗎？')) {
+          localStorage.removeItem('ks_math_items_custom');
+          localStorage.removeItem('ks_math_pasted_previews');
+          pastedPreviews.value = {};
+          await loadItemsData();
+          alert('已還原為原始試題！');
+        }
+      };
+
+      // 計算屬性
+      const curItem = computed(() => {
+        return items.value.find(q => q.id === selectedId.value) || items.value[0] || null;
+      });
+
+      const avgP = computed(() => {
+        if (!items.value.length) return '0.000';
+        const sum = items.value.reduce((acc, q) => acc + (q.p || 0), 0);
+        return (sum / items.value.length).toFixed(3);
+      });
+
+      const avgD = computed(() => {
+        if (!items.value.length) return '0.000';
+        const sum = items.value.reduce((acc, q) => acc + (q.d || 0), 0);
+        return (sum / items.value.length).toFixed(3);
+      });
+
+      const countLight = (keyword) => {
+        return items.value.filter(q => q.light && q.light.includes(keyword)).length;
+      };
+
+      const getBadgeClass = (lightStr) => {
+        if (!lightStr) return 'badge-green';
+        if (lightStr.includes('紅燈')) return 'badge-red';
+        if (lightStr.includes('黃燈')) return 'badge-yellow';
+        return 'badge-green';
+      };
+
+      const getDiagBoxClass = (lightStr) => {
+        if (!lightStr) return '';
+        if (lightStr.includes('紅燈')) return 'red-alert';
+        if (lightStr.includes('黃燈')) return 'yellow-alert';
+        return '';
+      };
+
+      return {
+        dataSourceNotice,
+        isLoggedIn,
+        loginForm,
+        loginError,
+        handleLogin,
+        handleLogout,
+        currentTab,
+        items,
+        selectedId,
+        adminSelectedId,
+        curItem,
+        avgP,
+        avgD,
+        countLight,
+        getBadgeClass,
+        getDiagBoxClass,
+        zoomImg,
+        editForm,
+        pastedPreviews,
+        imageLoadErrors,
+        loadAdminForm,
+        saveQuestionEdits,
+        exportJsonFile,
+        resetToDefault,
+        handlePaste,
+        handleDrop,
+        downloadCurrentImageFile,
+        getAdminPreviewImage,
+        getDisplayImage,
+        removeImagePath
+      };
+    }
+  }).mount('#app');
+</script>
+</body>
+</html>
